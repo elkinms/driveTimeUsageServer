@@ -23,3 +23,24 @@ export async function register({email, name, password}) {
         throw err;
     }
 }
+
+export async function login({ email, password }) {
+    if (!email || !password) {
+        const e = new Error('email and password are required');
+        e.status = 400;
+        throw e;
+    }
+
+    const key = String(email).trim().toLowerCase();
+
+    const user = await userRepository.findUserByIdWithPassword(key);
+    const correctPassword = user && await bcrypt.compare(password, user.passwordHash);
+    if (!user || !correctPassword) {
+        const e = new Error('invalid credentials');
+        e.status = 401;
+        throw e;
+    }
+
+    user.passwordHash = undefined; // if use .lean()
+    return user;
+}
