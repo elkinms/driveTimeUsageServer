@@ -1,7 +1,12 @@
-
+import * as userService from '../services/userServices.js';
 
 export const registerUser = async (req, res) => {
-    // TODO
+    try {
+        const userAccount = await userService.register(req.body);
+        res.status(201).json(userAccount);
+    } catch (err) {
+        res.status(err.status || 500).json({ message: err.message || 'server error' });
+    }
 };
 
 export const loginUser = async (req, res) => {
