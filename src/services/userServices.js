@@ -13,7 +13,11 @@ export async function register({email, name, password}) {
     try {
         const passwordHash = await bcrypt.hash(password, 10);
         const user = await userRepository.createUser({_id: key, name, passwordHash});
-        return user;
+        return {
+            id: user.id,
+            email: user.id,
+            name: user.name,
+        };
     } catch (err) {
         if (err?.code === 11000) {
             const e = new Error('user already exists');
@@ -42,5 +46,9 @@ export async function login({ email, password }) {
     }
 
     user.passwordHash = undefined; // if use .lean()
-    return user;
+    return {
+        id: user.id,
+        email: user.id,
+        name: user.name,
+    };
 }
