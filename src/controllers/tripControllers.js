@@ -44,7 +44,20 @@ export const getTripById = async (req, res) => {
 };
 
 export const listTrips = async (req, res) => {
-    // TODO
+    try {
+        const { email, page, limit, sort } = req.query;
+
+        const trips = await tripService.listTrips(email, {
+            page: Number(page) || 1,
+            limit: Number(limit) || 5,
+            sort: Number(sort) || -1,
+        });
+
+        res.json(trips);
+    } catch (err) {
+        console.error("List trips error:", err);
+        res.status(500).json({ message: "Failed to get trips" });
+    }
 };
 
 export const deleteTrip = async (req, res) => {

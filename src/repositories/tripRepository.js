@@ -50,7 +50,7 @@ class TripRepository {
         return Trip.findById(tripId);
     }
 
-    async listByUser(email, { page = 1, limit = 20, sort = -1 } = {}) {
+    async listByUser(email, { page = 1, limit = 5, sort = -1 } = {}) {
         const skip = (page - 1) * limit;
         return Trip.find({ userId: this.#key(email) })
             .sort({ startTime: sort })
